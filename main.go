@@ -46,5 +46,4 @@ func main() {
 
 	fileList := directory_walk.Search(args)
 	replace_extension.Convert(args, fileList)
-	fmt.Println("aaaa")
 }
