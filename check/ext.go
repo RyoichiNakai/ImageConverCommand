@@ -21,7 +21,7 @@ func Ext(args model.Args) error {
 		}
 
 		if *args.AfterExt == ext {
-			*args.BeforeExt = dot + *args.AfterExt
+			*args.AfterExt = dot + *args.AfterExt
 			after = true
 		}
 	}
