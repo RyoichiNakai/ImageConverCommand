@@ -1,14 +1,14 @@
-package directory_walk
+package searcher
 
 import (
 	"conversion_command/model"
-	"fmt"
+	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
 )
 
-func Search(args model.Args) (fileList []string) {
-
+func Search(args model.Args) ([]string, error) {
+	var fileList []string
 	err := filepath.Walk(args.Dir,
 		func(path string, info os.FileInfo, err error) error {
 			if filepath.Ext(path) == *args.BeforeExt {
@@ -18,8 +18,8 @@ func Search(args model.Args) (fileList []string) {
 		})
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to load directory:\n%v", err)
+		return nil, errors.New("Failed to load directory: no such file or directory")
 	}
 
-	return
+	return fileList, nil
 }

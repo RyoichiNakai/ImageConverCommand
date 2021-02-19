@@ -1,9 +1,10 @@
 package main
 
 import (
-	"conversion_command/directory_walk"
+	"conversion_command/check"
+	"conversion_command/convator"
 	"conversion_command/model"
-	"conversion_command/replace_extension"
+	"conversion_command/searcher"
 	"flag"
 	"fmt"
 	"os"
@@ -11,39 +12,23 @@ import (
 
 func main() {
 	var args model.Args
-	extensions := [6]string{"jpg", "jpeg", "png", "gif", "tiff", "bmp"}
 	args.BeforeExt = flag.String("b", "jpg", "Extension before conversion")
 	args.AfterExt = flag.String("a", "png", "Extension after conversion")
 	flag.Parse()
 	args.Dir = flag.Arg(0)
 
-	var (
-		before = false
-		after  = false
-	)
-
-	for _, ext := range extensions {
-		if *args.BeforeExt == ext {
-			*args.BeforeExt = "." + *args.BeforeExt
-			before = true
-		}
-
-		if *args.AfterExt == ext {
-			*args.AfterExt = "." + *args.AfterExt
-			after = true
-		}
+	extErr := check.Ext(args)
+	if extErr != nil {
+		fmt.Fprintf(os.Stderr, extErr.Error())
+		os.Exit(1)
 	}
 
-	if !before || !after {
-		fmt.Println("Extension Error:")
-		fmt.Println("You must choose image extensions.")
-		os.Exit(0)
+	fileList, dirErr := searcher.Search(args)
+	if dirErr != nil {
+		fmt.Fprintf(os.Stderr, dirErr.Error())
+		os.Exit(1)
 	}
 
-	if f, err := os.Stat(args.Dir); os.IsNotExist(err) || !f.IsDir() {
-		fmt.Fprintf(os.Stderr, "Failed to load directory:\n%v", err)
-	}
+	convator.Convert(args, fileList)
 
-	fileList := directory_walk.Search(args)
-	replace_extension.Convert(args, fileList)
 }

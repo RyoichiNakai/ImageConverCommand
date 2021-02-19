@@ -1,4 +1,4 @@
-package replace_extension
+package convator
 
 import (
 	"conversion_command/model"
@@ -42,7 +42,7 @@ func encodeImageFile(path string) string {
 func decodeImageFile(args model.Args, path, str string) {
 	data, _ := base64.StdEncoding.DecodeString(str)
 	ext := filepath.Ext(path)
-	dstPath := path[:len(path) - len(ext)] + *args.AfterExt
+	dstPath := path[:len(path)-len(ext)] + *args.AfterExt
 
 	writeFile, err := os.Create(dstPath)
 	if err != nil {
@@ -57,4 +57,3 @@ func decodeImageFile(args model.Args, path, str string) {
 	fmt.Println(filepath.Base(dstPath) + "を出力しています...")
 	fmt.Println("出力バイト数: " + strconv.Itoa(n) + "byte")
 }
-
