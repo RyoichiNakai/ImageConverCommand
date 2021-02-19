@@ -1,2 +1,5 @@
 # image フォルダは要らない
 image/
+go.sum
+main
+.env
