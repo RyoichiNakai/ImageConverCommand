@@ -14,9 +14,9 @@ type TestCase struct {
 }
 
 var (
-	cd, _  = os.Getwd()
-	before = ".jpg"
-	after  = ".jpg"
+	cd, _ = os.Getwd()
+	from  = ".jpg"
+	to    = ".jpg"
 )
 
 var errCases = []TestCase{
@@ -24,8 +24,8 @@ var errCases = []TestCase{
 		name: "異常系_引数なし",
 		in: model.Args{
 			Dir:       "",
-			BeforeExt: &before,
-			AfterExt:  &after,
+			BeforeExt: &from,
+			AfterExt:  &to,
 		},
 		out: "Failed to load directory: no such file or directory",
 	},
@@ -33,8 +33,8 @@ var errCases = []TestCase{
 		name: "異常系_引数あり_存在パス指定",
 		in: model.Args{
 			Dir:       "notExistDir",
-			BeforeExt: &before,
-			AfterExt:  &after,
+			BeforeExt: &from,
+			AfterExt:  &to,
 		},
 		out: "Failed to load directory: no such file or directory",
 	},
@@ -45,13 +45,13 @@ var normalCases = []TestCase{
 		name: "正常系_引数あり_フラグなし",
 		in: model.Args{
 			Dir:       cd[:len(cd)-len("searcher")],
-			BeforeExt: &before,
-			AfterExt:  &after,
+			BeforeExt: &from,
+			AfterExt:  &to,
 		},
 		out: []string{
-			cd[:len(cd)-len("searcher")] + "image/sample1" + before,
-			cd[:len(cd)-len("searcher")] + "image/sample2" + before,
-			cd[:len(cd)-len("searcher")] + "image/sample3" + before,
+			cd[:len(cd)-len("searcher")] + "image/sample1" + from,
+			cd[:len(cd)-len("searcher")] + "image/sample2" + from,
+			cd[:len(cd)-len("searcher")] + "image/sample3" + from,
 		},
 		// ファイルパス関連はテストにしやんほうがいいと思う
 	},
